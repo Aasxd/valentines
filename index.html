@@ -1,30 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>💖</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
+        :root{
+            --hotpink: #ff4da6;
+            --soft-pink: #ffd6e8;
+            --accent: #ff9fcf;
+            --glass: rgba(255,255,255,0.12);
+        }
+
+        html,body{
+            height:100%;
+            margin:0;
+        }
+
         body {
             margin: 0;
-            height: 100vh;
-            background: radial-gradient(circle at top, #ffd6e8, #ff9fcf);
+            min-height: 100dvh; /* better for mobile browsers */
+            background: radial-gradient(circle at top, var(--soft-pink), var(--accent));
             overflow: hidden;
             font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
+            -webkit-font-smoothing:antialiased;
+            -webkit-touch-callout:none;
+            -webkit-user-select:none;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* gentle shimmer */
+        body::after{
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,0.03), rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+            animation: shimmer 8s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes shimmer{
+            0%{transform: translateX(-20%)}
+            50%{transform: translateX(20%)}
+            100%{transform: translateX(-20%)}
+        }
+
+        /* Shared containers avoid notch */
+        #startScreen, #yesScreen, #game {
+            box-sizing: border-box;
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
         }
 
         /* Start Screen */
         #startScreen {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.70);
             color: white;
             display: flex;
             align-items: center;
@@ -32,66 +74,118 @@
             flex-direction: column;
             z-index: 999;
             cursor: pointer;
+            gap: 18px;
+            padding: 28px 20px;
+            text-align: center;
         }
 
         #startScreen h1 {
-            font-size: 3rem;
+            font-size: 2.2rem;
+            margin:0;
+            letter-spacing:0.6px;
+        }
+
+        #startScreen p {
+            margin:0;
+            font-size:1.15rem;
+            color:#ffdce8;
+            max-width:720px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.35);
         }
 
         /* Game Screen */
         #game {
             display: none;
             text-align: center;
+            width:100%;
+            max-width:920px;
+            margin: 0 auto;
+            z-index:1;
         }
 
-        h2 {
-            font-size: 2.5rem;
+        .page-header {
+            font-size: 1.5rem;
             color: white;
-            text-shadow: 0 0 10px hotpink;
+            text-shadow: 0 0 10px rgba(255,105,180,0.7);
+            margin: 10px auto 8px auto;
+            max-width: 900px;
+            padding: 0 12px;
+            transition: opacity 300ms ease, transform 300ms ease;
+            opacity: 1;
+            z-index: 2;
         }
 
         /* GIFs */
         .gifs {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 16px 0 22px 0;
+            flex-wrap: wrap;
+            align-items: center;
+            z-index:2;
+        }
+
+        .gifs h3 {
+            display:none; /* the text lives in header now */
         }
 
         .gifs img {
             width: 160px;
+            max-width: 44vw;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            border: 3px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
         }
 
         /* Buttons */
         .buttons {
             position: relative;
-            height: 120px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            z-index:2;
         }
 
         button {
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            border-radius: 30px;
+            padding: 14px 30px;
+            font-size: 1.05rem;
+            border-radius: 28px;
             border: none;
             cursor: pointer;
-            transition: transform 0.2s ease, background-color 0.2s ease;
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+            position: relative;
         }
 
         button:hover {
-            transform: scale(1.1);
-            background-color: #ff7ab1;
+            transform: translateY(-3px) scale(1.03);
         }
 
         #yesBtn {
-            background: hotpink;
+            background: linear-gradient(90deg,var(--hotpink), #ff7ab1);
             color: white;
+            font-weight:600;
+            padding: 16px 36px;
         }
 
         #noBtn {
             background: white;
+            color: #222;
             position: absolute;
-            color: black;
+            padding: 12px 18px;
+            left: 60%;
+            top: 20%;
+            transition: left 200ms ease, top 200ms ease, transform 160ms ease;
+            border-radius: 22px;
+            min-width: 84px;
         }
+
+        #noBtn:active { transform: scale(0.98); }
 
         /* Yes Screen */
         #yesScreen {
@@ -103,12 +197,20 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            padding: 28px;
+            text-align: center;
         }
 
         #yesScreen h1 {
-            font-size: 4rem;
+            font-size: 2.4rem;
             color: white;
             text-shadow: 0 0 25px hotpink;
+            margin: 0 0 12px 0;
+        }
+
+        #yesScreen p {
+            font-size:1.2rem;
+            margin:0;
         }
 
         /* Floating Hearts and Peonies */
@@ -117,6 +219,8 @@
             animation: floatUp linear forwards;
             pointer-events: none;
             will-change: transform, opacity;
+            user-select:none;
+            z-index: 6;
         }
 
         @keyframes floatUp {
@@ -130,11 +234,39 @@
             }
         }
 
+        /* Confetti / flower pieces */
+        .confetti-piece {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            transform-origin: center;
+            border-radius: 3px;
+            z-index: 7;
+            opacity: 0.95;
+            will-change: transform, opacity;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity:1 }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity:0 }
+        }
+
         /* small responsive adjustments */
         @media (max-width: 520px) {
-            .gifs img { width: 110px; }
-            h2 { font-size: 1.8rem; padding: 0 12px; }
-            #startScreen h1 { font-size: 2rem; }
+            .gifs img { width: 110px; max-width: 46vw; }
+            .page-header { font-size: 1.05rem; padding: 0 6px; }
+            #startScreen h1 { font-size: 1.6rem; }
+            #startScreen p { font-size: 0.98rem; }
+            #noBtn { left: 62%; top: 10%; min-width:68px; padding:10px 12px;}
+            .buttons { height: 120px; gap: 12px; }
+        }
+
+        /* pop animation for buttons reveal */
+        @keyframes pop {
+            0% { transform: scale(0.9); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -142,8 +274,9 @@
 <body>
 
 <!-- Start Screen -->
-<div id="startScreen">
+<div id="startScreen" role="button" aria-label="Tap to start">
     <h1>Tap to Start 💖🎮</h1>
+    <p id="introMessage">Hey baby, I just wanted to say that I’ve missed you so much 💖</p>
 </div>
 
 <!-- Music -->
@@ -153,8 +286,8 @@
 </audio>
 
 <!-- Game Screen -->
-<div id="game">
-    <h2>Hey baby, I just wanted to say that I’ve missed you so much 💖</h2>
+<div id="game" aria-live="polite">
+    <div id="pageHeader" class="page-header" aria-live="polite"></div>
 
     <!-- Page 1: "I Miss You" -->
     <div class="gifs" id="page1">
@@ -223,7 +356,7 @@
 <!-- Yes Screen -->
 <div id="yesScreen">
     <h1>💖 Oh I love you so much my pretty baby 💖</h1>
-    <p style="font-size:1.6rem;">💖🌸💖🌸💖🌸💖🌸💖</p>
+    <p>💖🌸💖🌸💖🌸💖🌸💖</p>
 </div>
 
 <script>
@@ -234,6 +367,7 @@ const music = document.getElementById("music");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const buttonsDiv = document.querySelector('.buttons');
+const pageHeader = document.getElementById('pageHeader');
 
 const pages = [
     document.getElementById("page1"),
@@ -255,12 +389,25 @@ function showPage(index) {
     pages.forEach((p, i) => {
         p.style.display = (i === index) ? 'flex' : 'none';
     });
+
+    // update header text from the page's h3
+    const h3 = pages[index].querySelector('h3');
+    if (h3) {
+        // small fade update
+        pageHeader.style.opacity = 0;
+        setTimeout(() => {
+            pageHeader.textContent = h3.textContent;
+            pageHeader.style.transform = 'translateY(-6px)';
+            pageHeader.style.opacity = 1;
+            setTimeout(() => pageHeader.style.transform = '', 250);
+        }, 160);
+    }
 }
 
 // play the pages in sequence
 function playPagesSequence() {
     let idx = 0;
-    const intervalMs = 3500; // time per page
+    const intervalMs = 6000; // 6 seconds per page
     showPage(0);
 
     const timer = setInterval(() => {
@@ -272,7 +419,6 @@ function playPagesSequence() {
             clearInterval(timer);
             showPage(pages.length - 1);
             buttonsDiv.style.display = 'block';
-            // small pop animation
             buttonsDiv.style.animation = 'pop 220ms ease';
             setTimeout(() => buttonsDiv.style.animation = '', 250);
         }
@@ -284,12 +430,13 @@ function moveNoButton() {
     const containerRect = buttonsDiv.getBoundingClientRect();
     const btnRect = noBtn.getBoundingClientRect();
 
-    // compute available area inside container
-    const maxLeft = Math.max(0, containerRect.width - btnRect.width);
-    const maxTop = Math.max(0, containerRect.height - btnRect.height);
+    // compute available area inside container (give a little padding)
+    const padding = 8;
+    const maxLeft = Math.max(0, containerRect.width - btnRect.width - padding * 2);
+    const maxTop = Math.max(0, containerRect.height - btnRect.height - padding * 2);
 
-    const left = Math.random() * maxLeft;
-    const top = Math.random() * maxTop;
+    const left = padding + Math.random() * maxLeft;
+    const top = padding + Math.random() * maxTop;
 
     noBtn.style.left = `${left}px`;
     noBtn.style.top = `${top}px`;
@@ -298,14 +445,14 @@ function moveNoButton() {
 // create floating emojis when YES is clicked
 function createFloats() {
     const emojis = ['💖','🌸','🌺','💐'];
-    const count = 30;
+    const count = 36;
     for (let i = 0; i < count; i++) {
         const el = document.createElement('div');
         el.className = 'float';
         el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
         // random size
-        const size = 16 + Math.random() * 48;
+        const size = 18 + Math.random() * 48;
         el.style.fontSize = `${size}px`;
 
         // random horizontal start
@@ -315,7 +462,7 @@ function createFloats() {
         el.style.bottom = `-${10 + Math.random() * 20}vh`;
 
         // random animation duration and delay
-        el.style.animationDuration = `${6 + Math.random() * 6}s`;
+        el.style.animationDuration = `${6 + Math.random() * 7}s`;
         el.style.animationDelay = `${Math.random() * 1.5}s`;
 
         // random opacity
@@ -331,36 +478,89 @@ function createFloats() {
     }
 }
 
+// create flower-like confetti pieces that fall
+function createConfetti() {
+    const colors = ['#FF6B9A', '#FFB6D9', '#FFD3E8', '#FFC0CB', '#FF7AB1'];
+    const count = 60;
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const size = 8 + Math.random() * 14;
+        el.style.width = `${size}px`;
+        el.style.height = `${size}px`;
+        el.style.left = `${Math.random() * 100}vw`;
+        el.style.top = `${-10 - Math.random() * 20}vh`;
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = `${Math.random() * 6}px`;
+        const dur = 2400 + Math.random() * 2600;
+        el.style.animation = `confettiFall ${dur}ms cubic-bezier(.17,.67,.3,1) forwards`;
+        el.style.transform = `translateX(${(Math.random()-0.5)*40}px) rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(el);
+
+        setTimeout(() => {
+            if (el && el.parentNode) el.parentNode.removeChild(el);
+        }, dur + 600);
+    }
+}
+
 /* Tap to Start */
 startScreen.addEventListener("click", () => {
+    // Hide start and show game
     startScreen.style.display = 'none';
     game.style.display = 'block';
 
-    // set sensible volume and play
-    music.volume = 0.25;
-    music.play().catch(() => {
-        // some browsers require explicit user gesture which we already have (click),
-        // but keep the catch to prevent uncaught promise errors
-    });
+    // update header to first page text immediately so user sees message
+    const firstH3 = pages[0].querySelector('h3');
+    pageHeader.textContent = firstH3 ? firstH3.textContent : '';
+
+    // set sensible volume and try to play audio (we have a user gesture)
+    try {
+        music.volume = 0.30;
+        music.play();
+    } catch (e) {
+        // ignore
+    }
 
     playPagesSequence();
 });
 
-// NO button evasive behavior on hover and click
+// NO button evasive behavior on hover/click/touch
 noBtn.addEventListener('mouseenter', moveNoButton);
 noBtn.addEventListener('click', (e) => {
     moveNoButton();
     e.preventDefault();
 });
+noBtn.addEventListener('touchstart', (e) => {
+    // respond immediately on touch devices
+    moveNoButton();
+    e.preventDefault();
+}, {passive:false});
+
+// update NO position within container when window resizes to keep it inside
+window.addEventListener('resize', () => {
+    // if buttons are visible, ensure NO is inside
+    if (buttonsDiv.style.display !== 'none') {
+        const containerRect = buttonsDiv.getBoundingClientRect();
+        const btnRect = noBtn.getBoundingClientRect();
+        // clamp left/top
+        const left = Math.min(Math.max(0, parseFloat(noBtn.style.left || 0)), Math.max(0, containerRect.width - btnRect.width));
+        const top = Math.min(Math.max(0, parseFloat(noBtn.style.top || 0)), Math.max(0, containerRect.height - btnRect.height));
+        noBtn.style.left = isNaN(left) ? '10px' : `${left}px`;
+        noBtn.style.top = isNaN(top) ? '10px' : `${top}px`;
+    }
+});
 
 // YES button behavior
 yesBtn.addEventListener('click', () => {
-    // show the yes screen and stop the game music
+    // show the yes screen but keep the music playing
     yesScreen.style.display = 'flex';
     game.style.display = 'none';
-    try { music.pause(); } catch (e) {}
+
+    // gentle music boost for the celebration (if allowed)
+    try { if (music.volume < 0.6) music.volume = Math.min(0.55, music.volume + 0.15); } catch (e) {}
 
     createFloats();
+    createConfetti();
 });
 
 // Initially hide all pages (so they don't flash before script runs)
