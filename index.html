@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at top, #ffd6e8, #ff9fcf);
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Start Screen */
+        #startScreen {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 999;
+            cursor: pointer;
+        }
+
+        #startScreen h1 {
+            font-size: 3rem;
+        }
+
+        /* Game Screen */
+        #game {
+            display: none;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 0 0 10px hotpink;
+        }
+
+        /* GIFs */
+        .gifs {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .gifs img {
+            width: 160px;
+        }
+
+        /* Buttons */
+        .buttons {
+            position: relative;
+            height: 120px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background-color: #ff7ab1;
+        }
+
+        #yesBtn {
+            background: hotpink;
+            color: white;
+        }
+
+        #noBtn {
+            background: white;
+            position: absolute;
+            color: black;
+        }
+
+        /* Yes Screen */
+        #yesScreen {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ffb6d9, #ffc0cb);
+            z-index: 5;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #yesScreen h1 {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 0 0 25px hotpink;
+        }
+
+        /* Floating Hearts and Peonies */
+        .float {
+            position: absolute;
+            animation: floatUp linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(100vh) scale(0.6);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-20vh) scale(1.4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Start Screen -->
+<div id="startScreen">
+    <h1>Tap to Start 💖🎮</h1>
+</div>
+
+<!-- Music -->
+<audio id="music" loop>
+    <source src="music/I Adore You.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Game Screen -->
+<div id="game">
+    <h2>Hey baby, I just wanted to say that I’ve missed you so much 💖</h2>
+
+    <!-- Page 1: "I Miss You" -->
+    <div class="gifs" id="page1">
+        <h3>I am really missing your presence and I wish we could’ve been next to each other right now.</h3>
+        <img src="images/bubu1.gif">
+    </div>
+
+    <!-- Page 2: "Can't Wait to Come Back" -->
+    <div class="gifs" id="page2">
+        <h3>I can't wait to come back to Dubai so we can go on walks and to the beaches.</h3>
+        <img src="images/walking.gif">
+        <img src="images/beach.gif">
+    </div>
+
+    <!-- Page 3: "Late Night Drives" -->
+    <div class="gifs" id="page3">
+        <h3>And oh, let’s not forget the late-night drives!</h3>
+        <img src="images/drives.gif">
+    </div>
+
+    <!-- Page 4: "Outings and Food" -->
+    <div class="gifs" id="page4">
+        <h3>And the outings and foooood!</h3>
+        <img src="images/outings.gif">
+    </div>
+
+    <!-- Page 5: "Ice Cream Dates" -->
+    <div class="gifs" id="page5">
+        <h3>And the ice cream dates perhaps 🍦</h3>
+        <img src="images/ic.gif">
+    </div>
+
+    <!-- Page 6: "Chai and Luqimaat" -->
+    <div class="gifs" id="page6">
+        <h3>Chai and Luqimaat sounds yummy right now 😋</h3>
+        <img src="images/tt.gif">
+    </div>
+
+    <!-- Page 7: "Fun Times" -->
+    <div class="gifs" id="page7">
+        <h3>This could go on forever because I have so much I want to do with you.</h3>
+        <img src="images/1.gif">
+        <img src="images/2.gif">
+        <img src="images/3.gif">
+    </div>
+
+    <!-- Page 8: "Everyday Together" -->
+    <div class="gifs" id="page8">
+        <h3>And honestly, I’d want to start and end my day with you. ❤️</h3>
+        <img src="images/everyday.gif">
+    </div>
+
+    <!-- Page 9: "I Just Had Something to Ask" -->
+    <div class="gifs" id="page9">
+        <h3>I just had something to ask you…</h3>
+        <img src="images/question.gif">
+    </div>
+
+    <!-- Final Question: Will You Be My Valentine -->
+    <div class="buttons">
+        <button id="yesBtn">YES 💖😍💍</button>
+        <button id="noBtn">NO 🙄</button>
+    </div>
+</div>
+
+<!-- Yes Screen -->
+<div id="yesScreen">
+    <h1>💖 Oh I love you so much my pretty baby 💖</h1>
+    <p style="font-size:1.6rem;">💖🌸💖🌸💖🌸💖🌸💖</p>
+</div>
+
+<script>
+const startScreen = document.getElementById("startScreen");
+const game = document.getElementById("game");
+const yesScreen = document.getElementById("yesScreen");
+const music = document.getElementById("music");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+const pages = [
+    document.getElementById("page1"),
+    document.getElementById("page2"),
+    document.getElementById("page3"),
+    document.getElementById("page4"),
+    document.getElementById("page5"),
+    document.getElementById("page6"),
+    document.getElementById("page7"),
+    document.getElementById("page8"),
+    document.getElementById("page9")
+];
+
+/* Tap to Start */
+startScreen.addEventListener("click", () => {
+    music.volume =
