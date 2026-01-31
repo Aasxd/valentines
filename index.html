@@ -37,23 +37,24 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* animated hue overlay for subtle color shifting */
+        /* animated color-shifting overlay for pink -> purple -> blue */
         body::before{
             content: '';
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at top, rgba(255,214,230,0.08), rgba(255,180,210,0.06));
             pointer-events: none;
             mix-blend-mode: screen;
             z-index: 0;
-            animation: hueShift 18s linear infinite;
-            opacity: 0.9;
+            opacity: 0.92;
+            animation: bgShift 16s ease-in-out infinite;
+            background: radial-gradient(circle at top, rgba(255,214,230,0.08), rgba(255,180,210,0.06));
         }
 
-        @keyframes hueShift{
-            0%{filter: hue-rotate(0deg)}
-            50%{filter: hue-rotate(25deg)}
-            100%{filter: hue-rotate(0deg)}
+        @keyframes bgShift{
+            0% { background: radial-gradient(circle at top, rgba(255,214,230,0.08), rgba(255,180,210,0.06)); }
+            33% { background: radial-gradient(circle at top, rgba(220,190,255,0.09), rgba(180,150,255,0.07)); }
+            66% { background: radial-gradient(circle at top, rgba(180,200,255,0.08), rgba(160,190,255,0.06)); }
+            100% { background: radial-gradient(circle at top, rgba(255,214,230,0.08), rgba(255,180,210,0.06)); }
         }
 
         /* gentle shimmer */
@@ -431,7 +432,13 @@
         <img src="images/question.gif" alt="question">
     </div>
 
-    <!-- Final Question: Will You Be My Valentine -->
+    <!-- Page 10: Final Question: Will You Be My Valentine -->
+    <div class="gifs" id="page10">
+        <h3>Will you be my valentine?</h3>
+        <img src="images/bubuflower.gif" alt="bubuflower">
+    </div>
+
+    <!-- Final Buttons -->
     <div class="buttons">
         <button id="yesBtn">YES 💖😚🌸</button>
         <button id="noBtn">NO 🙄</button>
@@ -481,7 +488,8 @@ const pages = [
     document.getElementById("page6"),
     document.getElementById("page7"),
     document.getElementById("page8"),
-    document.getElementById("page9")
+    document.getElementById("page9"),
+    document.getElementById("page10")
 ];
 
 // hide buttons initially
@@ -489,8 +497,8 @@ buttonsDiv.style.display = 'none';
 
 let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// helper: typewriter effect
-async function typeText(el, text, delay=28) {
+// helper: typewriter effect (slower for more typewriter feel)
+async function typeText(el, text, delay=55) {
     if (!el) return;
     if (reducedMotion) { el.textContent = text; return; }
     el.classList.add('caret');
@@ -502,7 +510,7 @@ async function typeText(el, text, delay=28) {
         else await new Promise(r=>setTimeout(r, delay));
     }
     // keep caret for a moment then remove
-    setTimeout(()=> el.classList.remove('caret'), 800);
+    setTimeout(()=> el.classList.remove('caret'), 900);
 }
 
 // helper to show exactly one page (hide others)
@@ -517,8 +525,8 @@ function showPage(index) {
         pageHeader.style.opacity = 0;
         setTimeout(() => {
             const text = h3.textContent || '';
-            // use typewriter
-            typeText(pageHeader, text, 28);
+            // use typewriter (slower)
+            typeText(pageHeader, text, 55);
             pageHeader.style.transform = 'translateY(-6px)';
             pageHeader.style.opacity = 1;
             setTimeout(() => pageHeader.style.transform = '', 250);
