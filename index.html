@@ -1,121 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>For Sadie 🌸</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Play time 💖</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at top, #ffd6e8, #ff9fcf);
+            overflow: hidden;
+            font-family: 'Comic Sans MS', cursive;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(180deg, #fff5f8, #fdecef);
-      text-align: center;
-      overflow-x: hidden;
-    }
+        /* SCREEN SHAKE */
+        .shake {
+            animation: shake 0.4s;
+        }
 
-    .peonies {
-      position: fixed;
-      inset: 0;
-      background-image: url("peony.jpg"), url("peoony 2.png");
-      background-size: 300px, 200px;
-      background-repeat: repeat;
-      opacity: 0.15;
-      z-index: -1;
-    }
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-10px, 5px); }
+            40% { transform: translate(10px, -5px); }
+            60% { transform: translate(-10px, 5px); }
+            80% { transform: translate(10px, -5px); }
+            100% { transform: translate(0, 0); }
+        }
 
-    .screen {
-      min-height: 100vh;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+        /* TAP TO START */
+        #startScreen {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 999;
+            cursor: pointer;
+        }
 
-    .screen.active {
-      display: flex;
-    }
+        #startScreen h1 {
+            font-size: 3rem;
+        }
 
-    h1 {
-      color: #b94b6b;
-      margin-bottom: 10px;
-    }
+        #startScreen p {
+            opacity: 0.8;
+        }
 
-    p {
-      color: #6b2f3a;
-      font-size: 1.1rem;
-      max-width: 500px;
-    }
+        /* GAME */
+        #game {
+            display: none;
+            text-align: center;
+        }
 
-    button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 30px;
-      background-color: #f4a7b9;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
+        h2 {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 0 0 10px hotpink;
+        }
 
-    button:hover {
-      background-color: #ec8fa6;
-      transform: scale(1.05);
-    }
+        /* GIFS */
+        .gifs {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
 
-    .gif {
-      width: 220px;
-      margin: 15px 0;
-      border-radius: 20px;
-    }
+        .gifs img {
+            width: 160px;
+        }
 
-    .choices {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-    }
+        /* BUTTONS */
+        .buttons {
+            position: relative;
+            height: 120px;
+        }
 
-    .heart {
-      font-size: 3rem;
-      animation: float 2s infinite ease-in-out;
-    }
+        button {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
 
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
-    }
-  </style>
+        button:hover {
+            transform: scale(1.1);
+            background-color: #ff7ab1;
+        }
+
+        #yesBtn {
+            background: hotpink;
+            color: white;
+        }
+
+        #noBtn {
+            background: white;
+            position: absolute;
+            color: black;
+        }
+
+        /* YES SCREEN */
+        #yesScreen {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ffb6d9, #ffc0cb);
+            z-index: 5;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #yesScreen h1 {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 0 0 25px hotpink;
+        }
+
+        /* FLOATING */
+        .float {
+            position: absolute;
+            animation: floatUp linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-  <div class="peonies"></div>
+<!-- TAP TO START -->
+<div id="startScreen">
+    <h1>Tap to Start 💖🎮</h1>
+    <p>Soft romance + chaos</p>
+</div>
 
-  <audio id="music" src="music.mp3" loop></audio>
+<!-- AUDIO -->
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    <source src="music.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+</audio>
 
-  <!-- Screen 1 -->
-  <div class="screen active" id="screen1">
-    <h1>Hey Sadie 🌸</h1>
-    <img src="bubu1.gif" class="gif">
-    <p>
-      Asad here. I made this tiny little thing just for you.
-      Take a second, relax, and keep tapping.
-    </p>
-    <button onclick="nextScreen(1)">Next 💕</button>
-  </div>
+<!-- GAME -->
+<div id="game">
+    <h2>Will you be mine? 💕🥺💖</h2>
 
-  <!-- Screen 2 -->
-  <div class="screen" id="screen2">
-    <h1>So basically…</h1>
-    <img src="bubu2.gif" class="gif">
-    <p>
-      Life feels softer, warmer, and way nicer when you’re around.
-      Even the boring days don’t feel boring.
-    </p>
-    <button onclick="nextScreen(2)">Keep going 🌷</button>
-  </div>
+    <div class="gifs">
+        <img src="bubu1.gif" alt="cute gif 1">
+        <img src="bubu2.gif" alt="cute gif 2">
+        <img src="bubu flower.gif" alt="flower gif">
+    </div>
 
-  <!-- Screen 3 -->
+    <div class="buttons">
+        <button id="yesBtn">YES 💖😍💍</button>
+        <button id="noBtn">NO 🙄</button>
+    </div>
+</div>
+
+<!-- YES SCREEN -->
+<div id="yesScreen">
+    <h1>💖 SADIE 💖</h1>
+    <p style="font-size:1.6rem;">💖🌸💖🌸💖🌸💖🌸💖</p>
+</div>
+
+<script>
+const startScreen = document.getElementById("startScreen");
+const game = document.getElementById("game");
+const yesScreen = document.getElementById("yesScreen");
+const music = document.getElementById("music");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+/* TAP TO START */
+startScreen.addEventListener("click", () => {
+    music.volume = 0.6;
+    music.play();
+    startScreen.style.display = "none";
+    game.style.display = "block";
+});
+
+/* NO BUTTON RUN AWAY */
+noBtn.addEventListener("mouseenter", () => {
+    noBtn.style.left = Math.random() * 260 + "px";
+    noBtn.style.top = Math.random() * 80 + "px";
+});
+
+/* IF NO IS CLICKED */
+noBtn.addEventListener("click", () => {
+    alert("aight bye nice to know you loser 💀");
+});
+
+/* YES CLICK */
+yesBtn.addEventListener("click", () => {
+    document.body.classList.add("shake");
+
+    // bass drop
+    music.volume = 1;
+    setTimeout(() => music.volume = 0.6, 600);
+
+    setTimeout(() => {
+        game.style.display = "none";
+        yesScreen.style.display = "flex";
+        spamHearts();
+        spamPeonies();
+    }, 400);
+});
+
+/* FLOATING HEARTS */
+function spamHearts() {
+    const maxHearts = 20; // Limit to avoid excessive DOM elements
+    let heartCount = 0;
+    const interval = setInterval(() => {
+        if (heartCount >= maxHearts) clearInterval(interval);
+        const h = document.createElement("div");
+        h.innerHTML = "💖💕💗💘💞💓";
+        h.className = "float";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.fontSize = Math.random() * 30 + 25 + "px";
+        h.style.animationDuration = Math.random() * 3 + 3 + "s";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 6000);
+        heartCount++;
+    }, 180);
+}
+
+/* FLOATING PEONIES */
+function spamPeonies() {
+    const maxPeonies = 20; // Limit to avoid excessive DOM elements
+    let peonyCount = 0;
+    const interval = setInterval(() => {
+        if (peonyCount >= maxPeonies) clearInterval(interval);
+        const p = document.createElement("img");
+        p.src = Math.random() > 0.5 ? "peony.jpg" : "peony2.png"; // Fixed typo
+        p.className = "float";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.width = "60px";
+        p.style.animationDuration = Math.random() * 4 + 4 + "s";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 8000);
+        peonyCount++;
+    }, 350);
+}
+</script>
+
+</body>
+</html>
