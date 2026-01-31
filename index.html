@@ -116,6 +116,7 @@
             position: absolute;
             animation: floatUp linear forwards;
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
         @keyframes floatUp {
@@ -127,6 +128,13 @@
                 transform: translateY(-20vh) scale(1.4);
                 opacity: 0;
             }
+        }
+
+        /* small responsive adjustments */
+        @media (max-width: 520px) {
+            .gifs img { width: 110px; }
+            h2 { font-size: 1.8rem; padding: 0 12px; }
+            #startScreen h1 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -151,58 +159,58 @@
     <!-- Page 1: "I Miss You" -->
     <div class="gifs" id="page1">
         <h3>I am really missing your presence and I wish we could’ve been next to each other right now.</h3>
-        <img src="images/bubu1.gif">
+        <img src="images/bubu1.gif" alt="missing you">
     </div>
 
     <!-- Page 2: "Can't Wait to Come Back" -->
     <div class="gifs" id="page2">
         <h3>I can't wait to come back to Dubai so we can go on walks and to the beaches.</h3>
-        <img src="images/walking.gif">
-        <img src="images/beach.gif">
+        <img src="images/walking.gif" alt="walking">
+        <img src="images/beach.gif" alt="beach">
     </div>
 
     <!-- Page 3: "Late Night Drives" -->
     <div class="gifs" id="page3">
         <h3>And oh, let’s not forget the late-night drives!</h3>
-        <img src="images/drives.gif">
+        <img src="images/drives.gif" alt="drives">
     </div>
 
     <!-- Page 4: "Outings and Food" -->
     <div class="gifs" id="page4">
         <h3>And the outings and foooood!</h3>
-        <img src="images/outings.gif">
+        <img src="images/outings.gif" alt="outings">
     </div>
 
     <!-- Page 5: "Ice Cream Dates" -->
     <div class="gifs" id="page5">
         <h3>And the ice cream dates perhaps 🍦</h3>
-        <img src="images/ic.gif">
+        <img src="images/ic.gif" alt="ice cream">
     </div>
 
     <!-- Page 6: "Chai and Luqimaat" -->
     <div class="gifs" id="page6">
         <h3>Chai and Luqimaat sounds yummy right now 😋</h3>
-        <img src="images/tt.gif">
+        <img src="images/tt.gif" alt="chai and luqimaat">
     </div>
 
     <!-- Page 7: "Fun Times" -->
     <div class="gifs" id="page7">
         <h3>This could go on forever because I have so much I want to do with you.</h3>
-        <img src="images/1.gif">
-        <img src="images/2.gif">
-        <img src="images/3.gif">
+        <img src="images/1.gif" alt="fun1">
+        <img src="images/2.gif" alt="fun2">
+        <img src="images/3.gif" alt="fun3">
     </div>
 
     <!-- Page 8: "Everyday Together" -->
     <div class="gifs" id="page8">
         <h3>And honestly, I’d want to start and end my day with you. ❤️</h3>
-        <img src="images/everyday.gif">
+        <img src="images/everyday.gif" alt="everyday">
     </div>
 
     <!-- Page 9: "I Just Had Something to Ask" -->
     <div class="gifs" id="page9">
         <h3>I just had something to ask you…</h3>
-        <img src="images/question.gif">
+        <img src="images/question.gif" alt="question">
     </div>
 
     <!-- Final Question: Will You Be My Valentine -->
@@ -225,6 +233,7 @@ const yesScreen = document.getElementById("yesScreen");
 const music = document.getElementById("music");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
+const buttonsDiv = document.querySelector('.buttons');
 
 const pages = [
     document.getElementById("page1"),
@@ -238,6 +247,124 @@ const pages = [
     document.getElementById("page9")
 ];
 
+// hide buttons initially
+buttonsDiv.style.display = 'none';
+
+// helper to show exactly one page (hide others)
+function showPage(index) {
+    pages.forEach((p, i) => {
+        p.style.display = (i === index) ? 'flex' : 'none';
+    });
+}
+
+// play the pages in sequence
+function playPagesSequence() {
+    let idx = 0;
+    const intervalMs = 3500; // time per page
+    showPage(0);
+
+    const timer = setInterval(() => {
+        idx++;
+        if (idx < pages.length) {
+            showPage(idx);
+        } else {
+            // finished sequence: stop interval, show final page and reveal buttons
+            clearInterval(timer);
+            showPage(pages.length - 1);
+            buttonsDiv.style.display = 'block';
+            // small pop animation
+            buttonsDiv.style.animation = 'pop 220ms ease';
+            setTimeout(() => buttonsDiv.style.animation = '', 250);
+        }
+    }, intervalMs);
+}
+
+// move the NO button to a random position within the buttons container
+function moveNoButton() {
+    const containerRect = buttonsDiv.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    // compute available area inside container
+    const maxLeft = Math.max(0, containerRect.width - btnRect.width);
+    const maxTop = Math.max(0, containerRect.height - btnRect.height);
+
+    const left = Math.random() * maxLeft;
+    const top = Math.random() * maxTop;
+
+    noBtn.style.left = `${left}px`;
+    noBtn.style.top = `${top}px`;
+}
+
+// create floating emojis when YES is clicked
+function createFloats() {
+    const emojis = ['💖','🌸','🌺','💐'];
+    const count = 30;
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'float';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+        // random size
+        const size = 16 + Math.random() * 48;
+        el.style.fontSize = `${size}px`;
+
+        // random horizontal start
+        el.style.left = `${Math.random() * 100}vw`;
+
+        // start slightly below the viewport for nicer animation
+        el.style.bottom = `-${10 + Math.random() * 20}vh`;
+
+        // random animation duration and delay
+        el.style.animationDuration = `${6 + Math.random() * 6}s`;
+        el.style.animationDelay = `${Math.random() * 1.5}s`;
+
+        // random opacity
+        el.style.opacity = `${0.6 + Math.random() * 0.4}`;
+
+        document.body.appendChild(el);
+
+        // remove after animation finishes (duration + delay)
+        const total = (parseFloat(el.style.animationDuration) + parseFloat(el.style.animationDelay)) * 1000 + 500;
+        setTimeout(() => {
+            if (el && el.parentNode) el.parentNode.removeChild(el);
+        }, total);
+    }
+}
+
 /* Tap to Start */
 startScreen.addEventListener("click", () => {
-    music.volume =
+    startScreen.style.display = 'none';
+    game.style.display = 'block';
+
+    // set sensible volume and play
+    music.volume = 0.25;
+    music.play().catch(() => {
+        // some browsers require explicit user gesture which we already have (click),
+        // but keep the catch to prevent uncaught promise errors
+    });
+
+    playPagesSequence();
+});
+
+// NO button evasive behavior on hover and click
+noBtn.addEventListener('mouseenter', moveNoButton);
+noBtn.addEventListener('click', (e) => {
+    moveNoButton();
+    e.preventDefault();
+});
+
+// YES button behavior
+yesBtn.addEventListener('click', () => {
+    // show the yes screen and stop the game music
+    yesScreen.style.display = 'flex';
+    game.style.display = 'none';
+    try { music.pause(); } catch (e) {}
+
+    createFloats();
+});
+
+// Initially hide all pages (so they don't flash before script runs)
+pages.forEach(p => p.style.display = 'none');
+</script>
+</body>
+</html>
