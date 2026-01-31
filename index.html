@@ -64,23 +64,6 @@
             text-shadow: 0 0 25px hotpink;
         }
 
-        .float {
-            position: absolute;
-            animation: floatUp linear forwards;
-            pointer-events: none;
-        }
-
-        @keyframes floatUp {
-            from {
-                transform: translateY(100vh) scale(0.6);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-20vh) scale(1.4);
-                opacity: 0;
-            }
-        }
-
         .gifs {
             display: flex;
             justify-content: center;
@@ -182,55 +165,43 @@
 </div>
 
 <script>
-const startScreen = document.getElementById("startScreen");
-const page1 = document.getElementById("page1");
-const page2 = document.getElementById("page2");
-const page3 = document.getElementById("page3");
-const page4 = document.getElementById("page4");
-const page5 = document.getElementById("page5");
-const page6 = document.getElementById("page6");
-const page7 = document.getElementById("page7");
-const page8 = document.getElementById("page8");
-const page9 = document.getElementById("page9");
+const pages = [document.getElementById("page1"), document.getElementById("page2"), document.getElementById("page3"), 
+               document.getElementById("page4"), document.getElementById("page5"), document.getElementById("page6"),
+               document.getElementById("page7"), document.getElementById("page8"), document.getElementById("page9")];
 const yesScreen = document.getElementById("yesScreen");
-
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
-// Start the game
-startScreen.addEventListener("click", () => {
-    startScreen.style.display = "none";
-    page1.style.display = "flex";
-    setTimeout(() => {
-        page1.style.display = "none";
-        page2.style.display = "flex";
-    }, 2000); // Transition after 2 seconds
-});
+// Start the game and auto-transition between pages
+document.getElementById("startBtn").addEventListener("click", () => {
+    document.getElementById("startScreen").style.display = "none";
+    pages[0].style.display = "flex";
+    let currentPage = 0;
 
-const pages = [page1, page2, page3, page4, page5, page6, page7, page8, page9];
-
-pages.forEach((page, index) => {
-    setTimeout(() => {
-        page.style.display = "none";
-        if (index + 1 < pages.length) {
-            pages[index + 1].style.display = "flex";
+    // Automatically transition to next page every 4 seconds
+    const interval = setInterval(() => {
+        if (currentPage < pages.length - 1) {
+            pages[currentPage].style.display = "none";
+            pages[++currentPage].style.display = "flex";
+        } else {
+            clearInterval(interval); // Stop once all pages have been displayed
+            yesScreen.style.display = "flex"; // Show final question
         }
-    }, (index + 1) * 4000); // 4 seconds per page
+    }, 4000);
 });
 
 // Final Question Logic
 yesBtn.addEventListener("click", () => {
     alert("I love you so much my pretty baby! 💖");
     yesScreen.style.display = "none";
-    page1.style.display = "flex"; // Go back to the start screen
 });
 
 noBtn.addEventListener("click", () => {
-    alert("Aight, bye! Nice to know you 💀");
+    alert("Aight, bye! Nice knowing you 💀");
     yesScreen.style.display = "none";
-    page1.style.display = "flex"; // Go back to the start screen
 });
 </script>
 
 </body>
 </html>
+
