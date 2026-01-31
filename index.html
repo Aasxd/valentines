@@ -13,22 +13,16 @@
             margin: 0;
             height: 100vh;
             background: radial-gradient(circle at top, #ffd6e8, #ff9fcf);
-            overflow: hidden;
             font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            text-align: center;
         }
 
         .page {
             display: none;
-            text-align: center;
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
         }
 
         button {
@@ -47,32 +41,10 @@
             background-color: #ff7ab1;
         }
 
-        #yesScreen {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #ffb6d9, #ffc0cb);
-            z-index: 5;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            display: none;
-        }
-
-        #yesScreen h1 {
-            font-size: 4rem;
-            color: white;
-            text-shadow: 0 0 25px hotpink;
-        }
-
-        .gifs {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
         .gifs img {
             width: 250px;
             border-radius: 10px;
+            margin: 10px;
         }
     </style>
 </head>
@@ -83,10 +55,10 @@
 <div id="startScreen" class="page">
     <h1>Hey baby, I just wanted to say that I’ve missed you so much 💖</h1>
     <p>Since you've been on my mind so much, I thought I'd make something small for you 💞</p>
-    <button id="startBtn"> startoooo 💖</button>
+    <button id="startBtn">Start 💖</button>
 </div>
 
-<!-- Next Pages with GIFs -->
+<!-- Pages with GIFs -->
 <div id="page1" class="page">
     <h2>I am really missing your presence and I wish we could’ve been next to each other right now.</h2>
     <div class="gifs">
@@ -165,32 +137,33 @@
 </div>
 
 <script>
-const pages = [document.getElementById("page1"), document.getElementById("page2"), document.getElementById("page3"), 
-               document.getElementById("page4"), document.getElementById("page5"), document.getElementById("page6"),
-               document.getElementById("page7"), document.getElementById("page8"), document.getElementById("page9")];
+let pages = [document.getElementById("page1"), document.getElementById("page2"), document.getElementById("page3"), 
+             document.getElementById("page4"), document.getElementById("page5"), document.getElementById("page6"),
+             document.getElementById("page7"), document.getElementById("page8"), document.getElementById("page9")];
+
+let currentPage = 0;
 const yesScreen = document.getElementById("yesScreen");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
-// Start the game and auto-transition between pages
 document.getElementById("startBtn").addEventListener("click", () => {
     document.getElementById("startScreen").style.display = "none";
-    pages[0].style.display = "flex";
-    let currentPage = 0;
+    pages[currentPage].style.display = "block";
+    currentPage++;
 
-    // Automatically transition to next page every 4 seconds
+    // Automatically move through pages
     const interval = setInterval(() => {
-        if (currentPage < pages.length - 1) {
-            pages[currentPage].style.display = "none";
-            pages[++currentPage].style.display = "flex";
+        if (currentPage < pages.length) {
+            pages[currentPage - 1].style.display = "none"; // Hide current page
+            pages[currentPage].style.display = "block";   // Show next page
+            currentPage++;
         } else {
-            clearInterval(interval); // Stop once all pages have been displayed
-            yesScreen.style.display = "flex"; // Show final question
+            clearInterval(interval);
+            yesScreen.style.display = "block"; // Show final question
         }
-    }, 4000);
+    }, 4000); // Change pages every 4 seconds
 });
 
-// Final Question Logic
 yesBtn.addEventListener("click", () => {
     alert("I love you so much my pretty baby! 💖");
     yesScreen.style.display = "none";
@@ -204,4 +177,3 @@ noBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
