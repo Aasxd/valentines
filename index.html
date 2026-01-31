@@ -2,34 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Play time 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
         body {
             margin: 0;
             height: 100vh;
             background: radial-gradient(circle at top, #ffd6e8, #ff9fcf);
             overflow: hidden;
-            font-family: 'Comic Sans MS', cursive;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* SCREEN SHAKE */
+        /* Screen Shake Animation */
         .shake {
             animation: shake 0.4s;
         }
 
         @keyframes shake {
             0% { transform: translate(0, 0); }
-            20% { transform: translate(-10px, 5px); }
-            40% { transform: translate(10px, -5px); }
-            60% { transform: translate(-10px, 5px); }
-            80% { transform: translate(10px, -5px); }
+            25% { transform: translate(-5px, 5px); }
+            50% { transform: translate(-10px, 0); }
+            75% { transform: translate(5px, -5px); }
             100% { transform: translate(0, 0); }
         }
 
-        /* TAP TO START */
+        /* Start Screen */
         #startScreen {
             position: absolute;
             inset: 0;
@@ -51,7 +55,7 @@
             opacity: 0.8;
         }
 
-        /* GAME */
+        /* Game Screen */
         #game {
             display: none;
             text-align: center;
@@ -63,7 +67,7 @@
             text-shadow: 0 0 10px hotpink;
         }
 
-        /* GIFS */
+        /* GIFs */
         .gifs {
             display: flex;
             gap: 20px;
@@ -75,7 +79,7 @@
             width: 160px;
         }
 
-        /* BUTTONS */
+        /* Buttons */
         .buttons {
             position: relative;
             height: 120px;
@@ -106,7 +110,7 @@
             color: black;
         }
 
-        /* YES SCREEN */
+        /* Yes Screen */
         #yesScreen {
             display: none;
             position: absolute;
@@ -124,7 +128,7 @@
             text-shadow: 0 0 25px hotpink;
         }
 
-        /* FLOATING */
+        /* Floating Hearts and Peonies */
         .float {
             position: absolute;
             animation: floatUp linear forwards;
@@ -133,39 +137,38 @@
 
         @keyframes floatUp {
             from {
-                transform: translateY(100vh) scale(0.5);
+                transform: translateY(100vh) scale(0.6);
                 opacity: 1;
             }
             to {
-                transform: translateY(-10vh) scale(1.2);
+                transform: translateY(-20vh) scale(1.4);
                 opacity: 0;
             }
         }
     </style>
 </head>
+
 <body>
 
-<!-- TAP TO START -->
+<!-- Start Screen -->
 <div id="startScreen">
     <h1>Tap to Start 💖🎮</h1>
-    <p>Soft romance + chaos</p>
 </div>
 
-<!-- AUDIO -->
+<!-- Music -->
 <audio id="music" loop>
-    <source src="music.mp3" type="audio/mpeg">
-    <source src="music.ogg" type="audio/ogg">
+    <source src="music/I Adore You.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
 
-<!-- GAME -->
+<!-- Game Screen -->
 <div id="game">
-    <h2>Will you be mine? 💕🥺💖</h2>
+    <h2>Will you be my Valentine? 💕🥺💖</h2>
 
     <div class="gifs">
-        <img src="bubu1.gif" alt="cute gif 1">
-        <img src="bubu2.gif" alt="cute gif 2">
-        <img src="bubu flower.gif" alt="flower gif">
+        <img src="images/bubu1.gif" alt="Bubu Gif">
+        <img src="images/bubu2.gif" alt="Bubu Gif 2">
+        <img src="images/bubu flower.gif" alt="Bubu Flower Gif">
     </div>
 
     <div class="buttons">
@@ -174,9 +177,9 @@
     </div>
 </div>
 
-<!-- YES SCREEN -->
+<!-- Yes Screen -->
 <div id="yesScreen">
-    <h1>💖 SADIE 💖</h1>
+    <h1>💖 oh I love you so much my pretty baby 💖</h1>
     <p style="font-size:1.6rem;">💖🌸💖🌸💖🌸💖🌸💖</p>
 </div>
 
@@ -188,7 +191,7 @@ const music = document.getElementById("music");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 
-/* TAP TO START */
+/* Tap to Start */
 startScreen.addEventListener("click", () => {
     music.volume = 0.6;
     music.play();
@@ -196,22 +199,22 @@ startScreen.addEventListener("click", () => {
     game.style.display = "block";
 });
 
-/* NO BUTTON RUN AWAY */
+/* No Button Run Away */
 noBtn.addEventListener("mouseenter", () => {
     noBtn.style.left = Math.random() * 260 + "px";
     noBtn.style.top = Math.random() * 80 + "px";
 });
 
-/* IF NO IS CLICKED */
+/* If No is Clicked */
 noBtn.addEventListener("click", () => {
     alert("aight bye nice to know you loser 💀");
 });
 
-/* YES CLICK */
+/* Yes Button Click */
 yesBtn.addEventListener("click", () => {
     document.body.classList.add("shake");
 
-    // bass drop
+    // Bass drop
     music.volume = 1;
     setTimeout(() => music.volume = 0.6, 600);
 
@@ -223,12 +226,9 @@ yesBtn.addEventListener("click", () => {
     }, 400);
 });
 
-/* FLOATING HEARTS */
+/* Floating Hearts */
 function spamHearts() {
-    const maxHearts = 20; // Limit to avoid excessive DOM elements
-    let heartCount = 0;
-    const interval = setInterval(() => {
-        if (heartCount >= maxHearts) clearInterval(interval);
+    setInterval(() => {
         const h = document.createElement("div");
         h.innerHTML = "💖💕💗💘💞💓";
         h.className = "float";
@@ -237,25 +237,20 @@ function spamHearts() {
         h.style.animationDuration = Math.random() * 3 + 3 + "s";
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 6000);
-        heartCount++;
     }, 180);
 }
 
-/* FLOATING PEONIES */
+/* Floating Peonies */
 function spamPeonies() {
-    const maxPeonies = 20; // Limit to avoid excessive DOM elements
-    let peonyCount = 0;
-    const interval = setInterval(() => {
-        if (peonyCount >= maxPeonies) clearInterval(interval);
+    setInterval(() => {
         const p = document.createElement("img");
-        p.src = Math.random() > 0.5 ? "peony.jpg" : "peoony 2.png"; // Fixed typo
+        p.src = Math.random() > 0.5 ? "images/peony.jpg" : "images/peony2.png";
         p.className = "float";
         p.style.left = Math.random() * 100 + "vw";
         p.style.width = "60px";
         p.style.animationDuration = Math.random() * 4 + 4 + "s";
         document.body.appendChild(p);
         setTimeout(() => p.remove(), 8000);
-        peonyCount++;
     }, 350);
 }
 </script>
