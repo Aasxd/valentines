@@ -248,7 +248,7 @@ function spamPeonies() {
     const interval = setInterval(() => {
         if (peonyCount >= maxPeonies) clearInterval(interval);
         const p = document.createElement("img");
-        p.src = Math.random() > 0.5 ? "peony.jpg" : "peony2.png"; // Fixed typo
+        p.src = Math.random() > 0.5 ? "peony.jpg" : "peoony 2.png"; // Fixed typo
         p.className = "float";
         p.style.left = Math.random() * 100 + "vw";
         p.style.width = "60px";
