@@ -1,59 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>For Sadie 💗</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(#fdecef, #fff);
-      color: #5a2a2a;
+      background: linear-gradient(#fdecef, #ffffff);
       text-align: center;
+      color: #5a2a2a;
       overflow-x: hidden;
-    }
-
-    h1 {
-      margin-top: 40px;
-      font-size: 2.2em;
-    }
-
-    p {
-      font-size: 1.1em;
-      padding: 0 20px;
     }
 
     .scene {
       display: none;
       min-height: 100vh;
-      padding-bottom: 40px;
+      padding: 40px 20px;
+      box-sizing: border-box;
     }
 
     .scene.active {
       display: block;
     }
 
+    h1 {
+      font-size: 2.2em;
+      margin-top: 40px;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      margin-top: 30px;
+    }
+
+    p {
+      font-size: 1.1em;
+      max-width: 500px;
+      margin: 15px auto;
+      line-height: 1.6;
+    }
+
     button {
-      background: #f4a7b9;
-      border: none;
-      border-radius: 25px;
+      margin-top: 30px;
       padding: 14px 26px;
       font-size: 1em;
+      border-radius: 30px;
+      border: none;
+      background: #f4a7b9;
       color: white;
       cursor: pointer;
-      margin-top: 30px;
     }
 
     button:hover {
       background: #e48ca1;
     }
 
-    .bubu {
-      width: 180px;
-      margin: 20px auto;
+    .gif {
+      width: 220px;
+      max-width: 80%;
+      margin: 30px auto;
       display: block;
     }
 
@@ -62,13 +71,16 @@
       top: 0;
       left: 0;
       width: 100%;
+      height: 100%;
+      background-image: url("images/peonies.gif");
+      background-size: cover;
       opacity: 0.15;
       z-index: -1;
     }
 
     .heart {
-      font-size: 2em;
-      animation: float 2s infinite ease-in-out;
+      font-size: 2.5em;
+      animation: float 2s ease-in-out infinite;
     }
 
     @keyframes float {
@@ -81,34 +93,34 @@
 
 <body>
 
-<img src="images/peonies.png" class="peonies" alt="Peonies background">
+<div class="peonies"></div>
 
-<audio autoplay loop>
+<audio id="bgm" loop>
   <source src="music/adore-you.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Scene 1 -->
 <div class="scene active" id="scene1">
-  <h1>Hi Sadie 💕</h1>
+  <h1>Hi Sadie 🌸</h1>
   <p>Asad made something small for you.</p>
-  <img src="images/bubu1.png" class="bubu" alt="Bubu Dudu">
+  <img src="images/bubu1.gif" class="gif" alt="Bubu Dudu">
   <button onclick="nextScene(2)">Next</button>
 </div>
 
 <!-- Scene 2 -->
 <div class="scene" id="scene2">
-  <h1>This is a tiny game</h1>
-  <p>No rules. Just vibes.</p>
-  <img src="images/bubu2.png" class="bubu" alt="Bubu Dudu">
+  <h1>This is just a tiny game</h1>
+  <p>No rules. No pressure. Just a moment.</p>
+  <img src="images/bubu2.gif" class="gif" alt="Bubu Dudu Flowers">
   <button onclick="nextScene(3)">Keep going</button>
 </div>
 
 <!-- Scene 3 -->
 <div class="scene" id="scene3">
-  <h1 class="heart">💗</h1>
-  <p>Question time.</p>
+  <div class="heart">💗</div>
   <h2>Sadie, will you be my Valentine?</h2>
-  <button onclick="yes()">Yes 💕</button>
+  <img src="images/bubu3.gif" class="gif" alt="Bubu Dudu Love">
+  <button onclick="nextScene(4)">Yes 💕</button>
 </div>
 
 <!-- Scene 4 -->
@@ -119,15 +131,21 @@
 </div>
 
 <script>
-  function nextScene(n) {
-    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-    document.getElementById('scene' + n).classList.add('active');
-  }
+  const music = document.getElementById("bgm");
 
-  function yes() {
-    nextScene(4);
+  function nextScene(n) {
+    document.querySelectorAll(".scene").forEach(scene => {
+      scene.classList.remove("active");
+    });
+    document.getElementById("scene" + n).classList.add("active");
+
+    // Start music on first interaction (needed for iPhone)
+    if (music.paused) {
+      music.play().catch(() => {});
+    }
   }
 </script>
 
 </body>
 </html>
+
