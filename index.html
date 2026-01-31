@@ -1,86 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>For Sadie 💗</title>
+  <meta charset="UTF-8" />
+  <title>For Sadie 🌸</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(#fdecef, #ffffff);
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(180deg, #fff5f8, #fdecef);
       text-align: center;
-      color: #5a2a2a;
       overflow-x: hidden;
-    }
-
-    .scene {
-      display: none;
-      min-height: 100vh;
-      padding: 40px 20px;
-      box-sizing: border-box;
-    }
-
-    .scene.active {
-      display: block;
-    }
-
-    h1 {
-      font-size: 2.2em;
-      margin-top: 40px;
-    }
-
-    h2 {
-      font-size: 1.6em;
-      margin-top: 30px;
-    }
-
-    p {
-      font-size: 1.1em;
-      max-width: 500px;
-      margin: 15px auto;
-      line-height: 1.6;
-    }
-
-    button {
-      margin-top: 30px;
-      padding: 14px 26px;
-      font-size: 1em;
-      border-radius: 30px;
-      border: none;
-      background: #f4a7b9;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #e48ca1;
-    }
-
-    .gif {
-      width: 220px;
-      max-width: 80%;
-      margin: 30px auto;
-      display: block;
     }
 
     .peonies {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url("images/peonies.gif");
-      background-size: cover;
+      inset: 0;
+      background-image: url("peony.jpg"), url("peoony 2.png");
+      background-size: 300px, 200px;
+      background-repeat: repeat;
       opacity: 0.15;
       z-index: -1;
     }
 
+    .screen {
+      min-height: 100vh;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    h1 {
+      color: #b94b6b;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #6b2f3a;
+      font-size: 1.1rem;
+      max-width: 500px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 30px;
+      background-color: #f4a7b9;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    button:hover {
+      background-color: #ec8fa6;
+      transform: scale(1.05);
+    }
+
+    .gif {
+      width: 220px;
+      margin: 15px 0;
+      border-radius: 20px;
+    }
+
+    .choices {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
     .heart {
-      font-size: 2.5em;
-      animation: float 2s ease-in-out infinite;
+      font-size: 3rem;
+      animation: float 2s infinite ease-in-out;
     }
 
     @keyframes float {
@@ -93,59 +92,30 @@
 
 <body>
 
-<div class="peonies"></div>
+  <div class="peonies"></div>
 
-<audio id="bgm" loop>
-  <source src="music/adore-you.mp3" type="audio/mpeg">
-</audio>
+  <audio id="music" src="music.mp3" loop></audio>
 
-<!-- Scene 1 -->
-<div class="scene active" id="scene1">
-  <h1>Hi Sadie 🌸</h1>
-  <p>Asad made something small for you.</p>
-  <img src="images/bubu1.gif" class="gif" alt="Bubu Dudu">
-  <button onclick="nextScene(2)">Next</button>
-</div>
+  <!-- Screen 1 -->
+  <div class="screen active" id="screen1">
+    <h1>Hey Sadie 🌸</h1>
+    <img src="bubu1.gif" class="gif">
+    <p>
+      Asad here. I made this tiny little thing just for you.
+      Take a second, relax, and keep tapping.
+    </p>
+    <button onclick="nextScreen(1)">Next 💕</button>
+  </div>
 
-<!-- Scene 2 -->
-<div class="scene" id="scene2">
-  <h1>This is just a tiny game</h1>
-  <p>No rules. No pressure. Just a moment.</p>
-  <img src="images/bubu2.gif" class="gif" alt="Bubu Dudu Flowers">
-  <button onclick="nextScene(3)">Keep going</button>
-</div>
+  <!-- Screen 2 -->
+  <div class="screen" id="screen2">
+    <h1>So basically…</h1>
+    <img src="bubu2.gif" class="gif">
+    <p>
+      Life feels softer, warmer, and way nicer when you’re around.
+      Even the boring days don’t feel boring.
+    </p>
+    <button onclick="nextScreen(2)">Keep going 🌷</button>
+  </div>
 
-<!-- Scene 3 -->
-<div class="scene" id="scene3">
-  <div class="heart">💗</div>
-  <h2>Sadie, will you be my Valentine?</h2>
-  <img src="images/bubu3.gif" class="gif" alt="Bubu Dudu Love">
-  <button onclick="nextScene(4)">Yes 💕</button>
-</div>
-
-<!-- Scene 4 -->
-<div class="scene" id="scene4">
-  <h1>💐</h1>
-  <p>You just made Asad very happy.</p>
-  <p>Happy Valentine’s Day.</p>
-</div>
-
-<script>
-  const music = document.getElementById("bgm");
-
-  function nextScene(n) {
-    document.querySelectorAll(".scene").forEach(scene => {
-      scene.classList.remove("active");
-    });
-    document.getElementById("scene" + n).classList.add("active");
-
-    // Start music on first interaction (needed for iPhone)
-    if (music.paused) {
-      music.play().catch(() => {});
-    }
-  }
-</script>
-
-</body>
-</html>
-
+  <!-- Screen 3 -->
