@@ -37,6 +37,25 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
+        /* animated hue overlay for subtle color shifting */
+        body::before{
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(255,214,230,0.08), rgba(255,180,210,0.06));
+            pointer-events: none;
+            mix-blend-mode: screen;
+            z-index: 0;
+            animation: hueShift 18s linear infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes hueShift{
+            0%{filter: hue-rotate(0deg)}
+            50%{filter: hue-rotate(25deg)}
+            100%{filter: hue-rotate(0deg)}
+        }
+
         /* gentle shimmer */
         body::after{
             content: '';
@@ -115,6 +134,25 @@
             z-index: 2;
         }
 
+        /* typewriter caret */
+        .caret::after{
+            content: '|';
+            margin-left: 6px;
+            opacity: 0.9;
+            animation: blink 900ms steps(2,end) infinite;
+        }
+        @keyframes blink { 50% { opacity: 0 } }
+
+        /* pulse animation */
+        .pulse {
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255,77,166,0.35)); }
+          50% { transform: scale(1.04); filter: drop-shadow(0 0 18px rgba(255,77,166,0.5)); }
+          100% { transform: scale(1); }
+        }
+
         /* GIFs */
         .gifs {
             display: flex;
@@ -138,7 +176,9 @@
             box-shadow: 0 6px 18px rgba(0,0,0,0.25);
             border: 3px solid rgba(255,255,255,0.08);
             background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+            transition: transform 260ms cubic-bezier(.2,.9,.25,1);
         }
+        .gifs img:hover { transform: translateY(-6px) scale(1.03) rotate(-1deg); }
 
         /* Buttons */
         .buttons {
@@ -234,6 +274,27 @@
             }
         }
 
+        /* collectable heart (mini-game) */
+        .collect-heart {
+            position: absolute;
+            user-select: none;
+            touch-action: manipulation;
+            width: 48px;
+            height: 48px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size: 28px;
+            transform-origin: center;
+            transition: transform 180ms ease, opacity 200ms ease;
+            z-index: 50;
+        }
+
+        .collect-heart.hit {
+            transform: scale(1.4) rotate(-20deg);
+            opacity: 0;
+        }
+
         /* Confetti / flower pieces */
         .confetti-piece {
             position: fixed;
@@ -252,6 +313,22 @@
             100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity:0 }
         }
 
+        /* score overlay */
+        #scoreOverlay{
+            position: fixed;
+            left:50%;
+            top:18%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.96);
+            color:#222;
+            padding: 12px 18px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            z-index: 120;
+            display:none;
+            font-weight:600;
+        }
+
         /* small responsive adjustments */
         @media (max-width: 520px) {
             .gifs img { width: 110px; max-width: 46vw; }
@@ -260,6 +337,7 @@
             #startScreen p { font-size: 0.98rem; }
             #noBtn { left: 62%; top: 10%; min-width:68px; padding:10px 12px;}
             .buttons { height: 120px; gap: 12px; }
+            .collect-heart { width:40px; height:40px; font-size:22px }
         }
 
         /* pop animation for buttons reveal */
@@ -267,6 +345,13 @@
             0% { transform: scale(0.9); opacity: 0; }
             60% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            body::after, body::before { animation: none }
+            .float, .confetti-piece, .collect-heart { animation: none !important; transition: none }
+            .pulse { animation: none }
         }
     </style>
 </head>
@@ -359,6 +444,19 @@
     <p>💖🌸💖🌸💖🌸💖🌸💖</p>
 </div>
 
+<!-- score overlay -->
+<div id="scoreOverlay">Hearts: <span id="scoreCount">0</span></div>
+
+<!-- secret modal (long press) -->
+<div id="secretModal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;z-index:200;">
+  <div style="background:linear-gradient(135deg,#fff0f6,#ffd6e8);padding:18px;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.25);max-width:86%;text-align:center;">
+    <h3 style="margin:0 0 8px 0;">🤫 A little secret</h3>
+    <p id="secretText" style="margin:0;font-weight:600;color:#5a1030">mhm — let me long press something else onto you 😉</p>
+    <div style="height:8px"></div>
+    <button id="closeSecret" style="padding:8px 12px;border-radius:8px;border:none;">Close</button>
+  </div>
+</div>
+
 <script>
 const startScreen = document.getElementById("startScreen");
 const game = document.getElementById("game");
@@ -368,6 +466,11 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const buttonsDiv = document.querySelector('.buttons');
 const pageHeader = document.getElementById('pageHeader');
+const scoreOverlay = document.getElementById('scoreOverlay');
+const scoreCount = document.getElementById('scoreCount');
+const secretModal = document.getElementById('secretModal');
+const secretText = document.getElementById('secretText');
+const closeSecret = document.getElementById('closeSecret');
 
 const pages = [
     document.getElementById("page1"),
@@ -384,23 +487,42 @@ const pages = [
 // hide buttons initially
 buttonsDiv.style.display = 'none';
 
+let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// helper: typewriter effect
+async function typeText(el, text, delay=28) {
+    if (!el) return;
+    if (reducedMotion) { el.textContent = text; return; }
+    el.classList.add('caret');
+    el.textContent = '';
+    for (let i=0;i<text.length;i++){
+        el.textContent += text[i];
+        // small pause at punctuation
+        if (text[i] === ',' || text[i] === '!' || text[i] === '.') await new Promise(r=>setTimeout(r, delay*6));
+        else await new Promise(r=>setTimeout(r, delay));
+    }
+    // keep caret for a moment then remove
+    setTimeout(()=> el.classList.remove('caret'), 800);
+}
+
 // helper to show exactly one page (hide others)
 function showPage(index) {
     pages.forEach((p, i) => {
         p.style.display = (i === index) ? 'flex' : 'none';
     });
 
-    // update header text from the page's h3
+    // update header text from the page's h3 using typewriter
     const h3 = pages[index].querySelector('h3');
     if (h3) {
-        // small fade update
         pageHeader.style.opacity = 0;
         setTimeout(() => {
-            pageHeader.textContent = h3.textContent;
+            const text = h3.textContent || '';
+            // use typewriter
+            typeText(pageHeader, text, 28);
             pageHeader.style.transform = 'translateY(-6px)';
             pageHeader.style.opacity = 1;
             setTimeout(() => pageHeader.style.transform = '', 250);
-        }, 160);
+        }, 120);
     }
 }
 
@@ -420,7 +542,12 @@ function playPagesSequence() {
             showPage(pages.length - 1);
             buttonsDiv.style.display = 'block';
             buttonsDiv.style.animation = 'pop 220ms ease';
+            // pulse yes button a bit for emphasis
+            yesBtn.classList.add('pulse');
             setTimeout(() => buttonsDiv.style.animation = '', 250);
+
+            // start the tap-to-collect mini-game for a short round
+            startCollectingRound(10000);
         }
     }, intervalMs);
 }
@@ -444,6 +571,7 @@ function moveNoButton() {
 
 // create floating emojis when YES is clicked
 function createFloats() {
+    if (reducedMotion) return;
     const emojis = ['💖','🌸','🌺','💐'];
     const count = 36;
     for (let i = 0; i < count; i++) {
@@ -480,6 +608,7 @@ function createFloats() {
 
 // create flower-like confetti pieces that fall
 function createConfetti() {
+    if (reducedMotion) return;
     const colors = ['#FF6B9A', '#FFB6D9', '#FFD3E8', '#FFC0CB', '#FF7AB1'];
     const count = 60;
     for (let i = 0; i < count; i++) {
@@ -565,6 +694,128 @@ yesBtn.addEventListener('click', () => {
 
 // Initially hide all pages (so they don't flash before script runs)
 pages.forEach(p => p.style.display = 'none');
+
+// ----------------- Collecting mini-game -----------------
+let collectScore = 0;
+let collectInterval = null;
+let collectActive = false;
+
+function spawnCollectHeart(container) {
+    const el = document.createElement('div');
+    el.className = 'collect-heart';
+    // choose from cute emojis (kept from your palette)
+    const choices = ['💖','🌸','🌺','💐','💘','😍'];
+    el.textContent = choices[Math.floor(Math.random()*choices.length)];
+
+    // random position inside container (avoid edges)
+    const rect = container.getBoundingClientRect();
+    const padding = 8;
+    const x = padding + Math.random() * (rect.width - padding*2 - 48);
+    const y = padding + Math.random() * (rect.height - padding*2 - 48);
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+
+    // tap/click handler
+    function hit(e){
+        e.stopPropagation();
+        if (el.classList.contains('hit')) return;
+        el.classList.add('hit');
+        collectScore += 1;
+        scoreCount.textContent = collectScore;
+        // small pop animation
+        el.style.transform = 'scale(1.6) rotate(-15deg)';
+        el.style.opacity = '0';
+        setTimeout(()=> el.remove(), 350);
+    }
+    el.addEventListener('click', hit);
+    el.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); hit(ev); }, {passive:false});
+
+    container.appendChild(el);
+
+    // auto-remove if not collected after a while
+    setTimeout(()=> { if (el && el.parentNode) el.parentNode.removeChild(el); }, 3800);
+}
+
+function startCollectingRound(durationMs = 8000) {
+    if (reducedMotion) return; // skip for reduced motion
+    collectScore = 0;
+    scoreCount.textContent = collectScore;
+    scoreOverlay.style.display = 'block';
+    collectActive = true;
+    const container = game;
+
+    // spawn hearts every 600-900ms
+    collectInterval = setInterval(()=>{
+        spawnCollectHeart(container);
+    }, 650 + Math.random()*300);
+
+    // stop after duration
+    setTimeout(()=>{
+        stopCollectingRound();
+    }, durationMs);
+}
+
+function stopCollectingRound(){
+    collectActive = false;
+    clearInterval(collectInterval);
+    collectInterval = null;
+    // show final little celebration and then hide overlay after a bit
+    scoreOverlay.innerHTML = `You collected <strong>${collectScore}</strong> ${collectScore===1? 'heart' : 'hearts'}!`;
+    // small confetti
+    createConfetti();
+    // keep visible for 3s
+    setTimeout(()=>{ scoreOverlay.style.display = 'none'; scoreOverlay.innerHTML = 'Hearts: <span id="scoreCount">0</span>'; }, 3000);
+}
+
+// ----------------- cursor heart trail (desktop) -----------------
+let lastTrail = 0;
+function maybeTrail(e){
+    const now = Date.now();
+    if (now - lastTrail < 80) return; // throttle
+    lastTrail = now;
+    const el = document.createElement('div');
+    el.className = 'collect-heart';
+    el.style.width = '26px';
+    el.style.height = '26px';
+    el.style.fontSize = '14px';
+    el.style.left = (e.clientX - 12) + 'px';
+    el.style.top = (e.clientY - 12) + 'px';
+    el.style.opacity = '0.85';
+    el.textContent = '💖';
+    el.style.pointerEvents = 'none';
+    document.body.appendChild(el);
+    el.style.transition = 'transform 700ms ease, opacity 700ms ease';
+    requestAnimationFrame(()=>{ el.style.transform = 'translateY(-26px) scale(1.2)'; el.style.opacity = '0'; });
+    setTimeout(()=> el.remove(), 800);
+}
+
+if (!reducedMotion) {
+    window.addEventListener('mousemove', maybeTrail);
+}
+
+// ----------------- long press on YES button for secret message -----------------
+let lpTimer = null;
+let lpFired = false;
+function startLongPress(e){
+    lpFired = false;
+    lpTimer = setTimeout(()=>{
+        lpFired = true;
+        // show secret modal
+        secretModal.style.display = 'flex';
+    }, 800);
+}
+function cancelLongPress(){
+    clearTimeout(lpTimer);
+}
+
+yesBtn.addEventListener('pointerdown', (e)=>{ startLongPress(e); });
+yesBtn.addEventListener('pointerup', (e)=>{ if (lpFired) e.preventDefault(); cancelLongPress(); });
+yesBtn.addEventListener('pointerleave', cancelLongPress);
+yesBtn.addEventListener('touchcancel', cancelLongPress);
+
+closeSecret.addEventListener('click', ()=>{ secretModal.style.display = 'none'; });
+secretModal.addEventListener('click', (e)=>{ if (e.target === secretModal) secretModal.style.display = 'none'; });
+
 </script>
 </body>
 </html>
