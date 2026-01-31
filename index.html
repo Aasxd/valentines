@@ -207,17 +207,28 @@ startScreen.addEventListener("click", () => {
     }, 2000); // Transition after 2 seconds
 });
 
+const pages = [page1, page2, page3, page4, page5, page6, page7, page8, page9];
+
+pages.forEach((page, index) => {
+    setTimeout(() => {
+        page.style.display = "none";
+        if (index + 1 < pages.length) {
+            pages[index + 1].style.display = "flex";
+        }
+    }, (index + 1) * 4000); // 4 seconds per page
+});
+
 // Final Question Logic
 yesBtn.addEventListener("click", () => {
     alert("I love you so much my pretty baby! 💖");
     yesScreen.style.display = "none";
-    page1.style.display = "flex"; // Go back to the start screen or go to the next page
+    page1.style.display = "flex"; // Go back to the start screen
 });
 
 noBtn.addEventListener("click", () => {
     alert("Aight, bye! Nice to know you 💀");
     yesScreen.style.display = "none";
-    page1.style.display = "flex"; // Go back to the start screen or go to the next page
+    page1.style.display = "flex"; // Go back to the start screen
 });
 </script>
 
