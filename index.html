@@ -20,69 +20,15 @@
             justify-content: center;
         }
 
-        /* Screen Shake Animation */
-        .shake {
-            animation: shake 0.4s;
-        }
-
-        @keyframes shake {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-5px, 5px); }
-            50% { transform: translate(-10px, 0); }
-            75% { transform: translate(5px, -5px); }
-            100% { transform: translate(0, 0); }
-        }
-
-        /* Start Screen */
-        #startScreen {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 999;
-            cursor: pointer;
-        }
-
-        #startScreen h1 {
-            font-size: 3rem;
-        }
-
-        #startScreen p {
-            opacity: 0.8;
-        }
-
-        /* Game Screen */
-        #game {
+        .page {
             display: none;
             text-align: center;
+            animation: fadeIn 1s ease-out;
         }
 
-        h2 {
-            font-size: 2.5rem;
-            color: white;
-            text-shadow: 0 0 10px hotpink;
-        }
-
-        /* GIFs */
-        .gifs {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .gifs img {
-            width: 160px;
-        }
-
-        /* Buttons */
-        .buttons {
-            position: relative;
-            height: 120px;
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         button {
@@ -92,6 +38,8 @@
             border: none;
             cursor: pointer;
             transition: transform 0.2s ease, background-color 0.2s ease;
+            background-color: hotpink;
+            color: white;
         }
 
         button:hover {
@@ -99,20 +47,7 @@
             background-color: #ff7ab1;
         }
 
-        #yesBtn {
-            background: hotpink;
-            color: white;
-        }
-
-        #noBtn {
-            background: white;
-            position: absolute;
-            color: black;
-        }
-
-        /* Yes Screen */
         #yesScreen {
-            display: none;
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, #ffb6d9, #ffc0cb);
@@ -120,6 +55,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            display: none;
         }
 
         #yesScreen h1 {
@@ -128,7 +64,6 @@
             text-shadow: 0 0 25px hotpink;
         }
 
-        /* Floating Hearts and Peonies */
         .float {
             position: absolute;
             animation: floatUp linear forwards;
@@ -145,115 +80,198 @@
                 opacity: 0;
             }
         }
+
+        .gifs {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .gifs img {
+            width: 250px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 
 <body>
 
 <!-- Start Screen -->
-<div id="startScreen">
-    <h1>Tap to Start 💖🎮</h1>
+<div id="startScreen" class="page">
+    <h1>Hey baby, I just wanted to say that I’ve missed you so much 💖</h1>
+    <p>Since you've been on my mind so much, I thought I'd make something small for you 💞</p>
+    <button id="startBtn">Let's Begin 💖</button>
 </div>
 
-<!-- Music -->
-<audio id="music" loop>
-    <source src="music/I Adore You.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-</audio>
-
-<!-- Game Screen -->
-<div id="game">
-    <h2>Will you be my Valentine? 💕🥺💖</h2>
-
+<!-- Next Pages with GIFs -->
+<div id="page1" class="page">
+    <h2>I am really missing your presence and I wish we could’ve been next to each other right now.</h2>
     <div class="gifs">
-        <img src="images/bubu1.gif" alt="Bubu Gif">
-        <img src="images/bubu2.gif" alt="Bubu Gif 2">
-        <img src="images/bubu flower.gif" alt="Bubu Flower Gif">
+        <img src="images/alone.gif" alt="Missing You">
     </div>
-
-    <div class="buttons">
-        <button id="yesBtn">YES 💖😍💍</button>
-        <button id="noBtn">NO 🙄</button>
-    </div>
+    <button id="nextBtn1">Next</button>
 </div>
 
-<!-- Yes Screen -->
-<div id="yesScreen">
-    <h1>💖 Oh I love you so much my pretty baby 💖</h1>
-    <p style="font-size:1.6rem;">💖🌸💖🌸💖🌸💖🌸💖</p>
+<div id="page2" class="page">
+    <h2>I can't wait to come back to Dubai so we can go on walks and the beaches.</h2>
+    <div class="gifs">
+        <img src="images/walking.gif" alt="Walking">
+        <img src="images/beach.gif" alt="Beach">
+    </div>
+    <button id="nextBtn2">Next</button>
+</div>
+
+<div id="page3" class="page">
+    <h2>And oh, let’s not forget the late-night drives!</h2>
+    <div class="gifs">
+        <img src="images/drives.gif" alt="Late Night Drive">
+    </div>
+    <button id="nextBtn3">Next</button>
+</div>
+
+<div id="page4" class="page">
+    <h2>And the outings and foooood!</h2>
+    <div class="gifs">
+        <img src="images/outings.gif" alt="Outing">
+    </div>
+    <button id="nextBtn4">Next</button>
+</div>
+
+<div id="page5" class="page">
+    <h2>And the ice cream dates perhaps 🍦</h2>
+    <div class="gifs">
+        <img src="images/ice_cream.gif" alt="Ice Cream">
+    </div>
+    <button id="nextBtn5">Next</button>
+</div>
+
+<div id="page6" class="page">
+    <h2>Chai and Luqimaat sounds yummy right now 😋</h2>
+    <div class="gifs">
+        <img src="images/tea_time.gif" alt="Tea Time">
+    </div>
+    <button id="nextBtn6">Next</button>
+</div>
+
+<div id="page7" class="page">
+    <h2>This could go on forever because I have so much I want to do with you.</h2>
+    <div class="gifs">
+        <img src="images/1.gif" alt="Fun times">
+        <img src="images/2.gif" alt="More fun">
+        <img src="images/3.gif" alt="Exciting times">
+    </div>
+    <button id="nextBtn7">Next</button>
+</div>
+
+<div id="page8" class="page">
+    <h2>And honestly, I’d want to start and end my day with you. ❤️</h2>
+    <div class="gifs">
+        <img src="images/everyday.gif" alt="Everyday">
+    </div>
+    <button id="nextBtn8">Next</button>
+</div>
+
+<div id="page9" class="page">
+    <h2>I just had something to ask you…</h2>
+    <div class="gifs">
+        <img src="images/question.gif" alt="Question">
+    </div>
+    <button id="nextBtn9">Next</button>
+</div>
+
+<!-- Final Question: Will You Be My Valentine -->
+<div id="yesScreen" class="page">
+    <h1>💖 Will you be my Valentine? 💖</h1>
+    <div class="gifs">
+        <img src="images/walking.gif" alt="Walking">
+        <img src="images/beach.gif" alt="Beach">
+    </div>
+    <button id="yesBtn">YES 💖😍💍</button>
+    <button id="noBtn">NO 🙄</button>
 </div>
 
 <script>
 const startScreen = document.getElementById("startScreen");
-const game = document.getElementById("game");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const page3 = document.getElementById("page3");
+const page4 = document.getElementById("page4");
+const page5 = document.getElementById("page5");
+const page6 = document.getElementById("page6");
+const page7 = document.getElementById("page7");
+const page8 = document.getElementById("page8");
+const page9 = document.getElementById("page9");
 const yesScreen = document.getElementById("yesScreen");
-const music = document.getElementById("music");
-const noBtn = document.getElementById("noBtn");
+
+const nextBtn1 = document.getElementById("nextBtn1");
+const nextBtn2 = document.getElementById("nextBtn2");
+const nextBtn3 = document.getElementById("nextBtn3");
+const nextBtn4 = document.getElementById("nextBtn4");
+const nextBtn5 = document.getElementById("nextBtn5");
+const nextBtn6 = document.getElementById("nextBtn6");
+const nextBtn7 = document.getElementById("nextBtn7");
+const nextBtn8 = document.getElementById("nextBtn8");
+const nextBtn9 = document.getElementById("nextBtn9");
+
 const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 
-/* Tap to Start */
+// Start the game
 startScreen.addEventListener("click", () => {
-    music.volume = 0.6;
-    music.play();
     startScreen.style.display = "none";
-    game.style.display = "block";
+    page1.style.display = "flex";
 });
 
-/* No Button Run Away */
-noBtn.addEventListener("mouseenter", () => {
-    noBtn.style.left = Math.random() * 260 + "px";
-    noBtn.style.top = Math.random() * 80 + "px";
+// Handle next button clicks
+nextBtn1.addEventListener("click", () => {
+    page1.style.display = "none";
+    page2.style.display = "flex";
+});
+nextBtn2.addEventListener("click", () => {
+    page2.style.display = "none";
+    page3.style.display = "flex";
+});
+nextBtn3.addEventListener("click", () => {
+    page3.style.display = "none";
+    page4.style.display = "flex";
+});
+nextBtn4.addEventListener("click", () => {
+    page4.style.display = "none";
+    page5.style.display = "flex";
+});
+nextBtn5.addEventListener("click", () => {
+    page5.style.display = "none";
+    page6.style.display = "flex";
+});
+nextBtn6.addEventListener("click", () => {
+    page6.style.display = "none";
+    page7.style.display = "flex";
+});
+nextBtn7.addEventListener("click", () => {
+    page7.style.display = "none";
+    page8.style.display = "flex";
+});
+nextBtn8.addEventListener("click", () => {
+    page8.style.display = "none";
+    page9.style.display = "flex";
 });
 
-/* If No is Clicked */
-noBtn.addEventListener("click", () => {
-    alert("aight bye nice to know you loser 💀");
+// Final Question Logic
+nextBtn9.addEventListener("click", () => {
+    page9.style.display = "none";
+    yesScreen.style.display = "flex";
 });
 
-/* Yes Button Click */
+// YES and NO buttons
 yesBtn.addEventListener("click", () => {
-    document.body.classList.add("shake");
-
-    // Bass drop
-    music.volume = 1;
-    setTimeout(() => music.volume = 0.6, 600);
-
-    setTimeout(() => {
-        game.style.display = "none";
-        yesScreen.style.display = "flex";
-        spamHearts();
-        spamPeonies();
-    }, 400);
+    alert("I love you so much my pretty baby! 💖");
 });
 
-/* Floating Hearts */
-function spamHearts() {
-    setInterval(() => {
-        const h = document.createElement("div");
-        h.innerHTML = "💖💕💗💘💞💓";
-        h.className = "float";
-        h.style.left = Math.random() * 100 + "vw";
-        h.style.fontSize = Math.random() * 30 + 25 + "px";
-        h.style.animationDuration = Math.random() * 3 + 3 + "s";
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 6000);
-    }, 180);
-}
-
-/* Floating Peonies */
-function spamPeonies() {
-    setInterval(() => {
-        const p = document.createElement("img");
-        p.src = Math.random() > 0.5 ? "images/peony.jpg" : "images/peony2.png";
-        p.className = "float";
-        p.style.left = Math.random() * 100 + "vw";
-        p.style.width = "60px";
-        p.style.animationDuration = Math.random() * 4 + 4 + "s";
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 8000);
-    }, 350);
-}
+noBtn.addEventListener("click", () => {
+    alert("Aight, bye! Nice to know you 💀");
+});
 </script>
 
 </body>
 </html>
+
