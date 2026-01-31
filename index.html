@@ -107,83 +107,74 @@
 <div id="page1" class="page">
     <h2>I am really missing your presence and I wish we could’ve been next to each other right now.</h2>
     <div class="gifs">
-        <img src="images/bubu1.gif" alt="Missing You">
+        <img src="images/bubu1.gif">
     </div>
-    <button id="nextBtn1">Next</button>
 </div>
 
 <div id="page2" class="page">
     <h2>I can't wait to come back to Dubai so we can go on walks and the beaches.</h2>
     <div class="gifs">
-        <img src="images/walking.gif" alt="Walking">
-        <img src="images/beach.gif" alt="Beach">
+        <img src="images/walking.gif">
+        <img src="images/beach.gif">
     </div>
-    <button id="nextBtn2">Next</button>
 </div>
 
 <div id="page3" class="page">
     <h2>And oh, let’s not forget the late-night drives!</h2>
     <div class="gifs">
-        <img src="images/drives.gif" alt="Late Night Drive">
+        <img src="images/drives.gif">
     </div>
-    <button id="nextBtn3">Next</button>
 </div>
 
 <div id="page4" class="page">
     <h2>And the outings and foooood!</h2>
     <div class="gifs">
-        <img src="images/outings.gif" alt="Outing">
+        <img src="images/outings.gif">
     </div>
-    <button id="nextBtn4">Next</button>
 </div>
 
 <div id="page5" class="page">
     <h2>And the ice cream dates perhaps 🍦</h2>
     <div class="gifs">
-        <img src="images/ic.gif" alt="Ice Cream"> <!-- Updated to ic.gif -->
+        <img src="images/ic.gif">
     </div>
-    <button id="nextBtn5">Next</button>
 </div>
 
 <div id="page6" class="page">
     <h2>Chai and Luqimaat sounds yummy right now 😋</h2>
     <div class="gifs">
-        <img src="images/tt.gif" alt="Tea Time"> <!-- Updated to tt.gif -->
+        <img src="images/tt.gif">
     </div>
-    <button id="nextBtn6">Next</button>
 </div>
 
 <div id="page7" class="page">
     <h2>This could go on forever because I have so much I want to do with you.</h2>
     <div class="gifs">
-        <img src="images/1.gif" alt="Fun times">
-        <img src="images/2.gif" alt="More fun">
-        <img src="images/3.gif" alt="Exciting times">
+        <img src="images/1.gif">
+        <img src="images/2.gif">
+        <img src="images/3.gif">
     </div>
-    <button id="nextBtn7">Next</button>
 </div>
 
 <div id="page8" class="page">
     <h2>And honestly, I’d want to start and end my day with you. ❤️</h2>
     <div class="gifs">
-        <img src="images/everyday.gif" alt="Everyday">
+        <img src="images/everyday.gif">
     </div>
-    <button id="nextBtn8">Next</button>
 </div>
 
 <div id="page9" class="page">
     <h2>I just had something to ask you…</h2>
     <div class="gifs">
-        <img src="images/question.gif" alt="Question">
+        <img src="images/question.gif">
     </div>
-    <button id="nextBtn9">Next</button>
 </div>
 
 <!-- Final Question: Will You Be My Valentine -->
 <div id="yesScreen" class="page">
     <h1>💖 Will you be my Valentine? 💖</h1>
     <div class="gifs">
-        <img src="images/bubuflower.gif" alt="Bubu Flower"> <!-- Updated to bubuflower.gif -->
+        <img src="images/bubuflower.gif">
     </div>
     <button id="yesBtn">YES 💖😍💍</button>
     <button id="noBtn">NO 🙄</button>
@@ -202,16 +193,6 @@ const page8 = document.getElementById("page8");
 const page9 = document.getElementById("page9");
 const yesScreen = document.getElementById("yesScreen");
 
-const nextBtn1 = document.getElementById("nextBtn1");
-const nextBtn2 = document.getElementById("nextBtn2");
-const nextBtn3 = document.getElementById("nextBtn3");
-const nextBtn4 = document.getElementById("nextBtn4");
-const nextBtn5 = document.getElementById("nextBtn5");
-const nextBtn6 = document.getElementById("nextBtn6");
-const nextBtn7 = document.getElementById("nextBtn7");
-const nextBtn8 = document.getElementById("nextBtn8");
-const nextBtn9 = document.getElementById("nextBtn9");
-
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
@@ -219,55 +200,23 @@ const noBtn = document.getElementById("noBtn");
 startScreen.addEventListener("click", () => {
     startScreen.style.display = "none";
     page1.style.display = "flex";
-});
-
-// Handle next button clicks
-nextBtn1.addEventListener("click", () => {
-    page1.style.display = "none";
-    page2.style.display = "flex";
-});
-nextBtn2.addEventListener("click", () => {
-    page2.style.display = "none";
-    page3.style.display = "flex";
-});
-nextBtn3.addEventListener("click", () => {
-    page3.style.display = "none";
-    page4.style.display = "flex";
-});
-nextBtn4.addEventListener("click", () => {
-    page4.style.display = "none";
-    page5.style.display = "flex";
-});
-nextBtn5.addEventListener("click", () => {
-    page5.style.display = "none";
-    page6.style.display = "flex";
-});
-nextBtn6.addEventListener("click", () => {
-    page6.style.display = "none";
-    page7.style.display = "flex";
-});
-nextBtn7.addEventListener("click", () => {
-    page7.style.display = "none";
-    page8.style.display = "flex";
-});
-nextBtn8.addEventListener("click", () => {
-    page8.style.display = "none";
-    page9.style.display = "flex";
+    setTimeout(() => {
+        page1.style.display = "none";
+        page2.style.display = "flex";
+    }, 2000); // Transition after 2 seconds
 });
 
 // Final Question Logic
-nextBtn9.addEventListener("click", () => {
-    page9.style.display = "none";
-    yesScreen.style.display = "flex";
-});
-
-// YES and NO buttons
 yesBtn.addEventListener("click", () => {
     alert("I love you so much my pretty baby! 💖");
+    yesScreen.style.display = "none";
+    page1.style.display = "flex"; // Go back to the start screen or go to the next page
 });
 
 noBtn.addEventListener("click", () => {
     alert("Aight, bye! Nice to know you 💀");
+    yesScreen.style.display = "none";
+    page1.style.display = "flex"; // Go back to the start screen or go to the next page
 });
 </script>
 
